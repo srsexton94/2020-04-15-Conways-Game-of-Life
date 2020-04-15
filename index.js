@@ -1,9 +1,9 @@
-// function takes in an integer and outputs a random integer between 0 & the max
+// function takes in an integer and outputs a random integer between 0 & input
 const randomInt = (max) => {
   return Math.round(Math.random() * (max))
 }
 
-// function accepts a integer of the side of the gameboard's sides
+// function accepts a integer of the size of the gameboard's sides
 // it outputs a 2-dimensional array, initialized with all `0` values
 // `0` represents a dead cell, `1` represents an alive cell
 const createBoard = sideLength => {
