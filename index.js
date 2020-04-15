@@ -60,16 +60,21 @@ const next = () => {
   const nextBoard = board
   board.forEach(row => {
     row.forEach(cell => {
-      // if the
-      if (board[row][cell]) {
-
+      const neighbors = liveNeighbors(row, cell)
+      // if the spot is truthy, and has 2 or 3 neighbors
+      if (board[row][cell] && (neighbors == 2 || neighbors == 3)) {
+      nextBoard[row][cell] = board[row][cell]
+      // if the spot is dead but has exactly 3 neighbors, it next becomes alive
+      } else if (board[row][cell] === 0 && neighbors === 3) {
+        nextBoard[row][cell] = 1
+      } else {
+        nextBoard[row][cell] = 0
       }
     })
   })
+  board = nextBoard
 }
 
-// Any live cell with two or three live neighbors survives.
 
-// Any dead cell with three live neighbors becomes a live cell.
 
 // All other cells die or stay dead
