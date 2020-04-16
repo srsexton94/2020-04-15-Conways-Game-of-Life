@@ -1,6 +1,6 @@
 // function takes in an integer and outputs a random integer between 0 & input
 const randomInt = (max) => {
-  return Math.round(Math.random() * (max))
+  return Math.round(Math.random() * (max - 1))
 }
 
 // function accepts a integer of the size of the gameboard's sides
@@ -38,24 +38,42 @@ selectCells(randomInt(side))
 // function takes in the row & cell placement of a square and returns number
 // of live neighbors
 const liveNeighbors = (r, c) => {
-  // incrementor to
-  const total = 0
-  // initializes a 2 dimensional array of all the selected squares neighbors
+  let total = 0 // incrementor for live neighbors
+  // initializes a 3(!) dimensional array of the row prior, during, and after
+  // the input spot
   const square = [
-    [(r - 1), (c - 1)], [(r - 1), c], [(r - 1), (c + 1)],
-    [ r, (c - 1)], [r, (c + 1)],
-    [(r + 1), (c - 1)], [(r + 1), c], [(r + 1), (c + 1)]
+    [[(r - 1), (c - 1)], [(r - 1), c], [(r - 1), (c + 1)]],
+    [[ r, (c - 1)], [r, (c + 1)]],
+    [[(r + 1), (c - 1)], [(r + 1), c], [(r + 1), (c + 1)]]
   ]
-  // for each truthy neighbor (ie 1) increase incrementor by 1
-  square.forEach(neighbor => {
-    if (board[neighbor[0]][neighbor[1]]) {
-      total += 1
-    }
+  // if the provided row is first don't check a 'prior' row
+  if (r === 0) {
+    square.shift()
+  // if the provided row is last don't check a 'following' row
+  } else if (r === (side - 1)) {
+    square.pop()
+  }
+  // if the provided column is first, don't check a 'prior' one
+  if (c === 0) {
+    square.forEach(row => row.shift())
+  // if the provided column is last, don't check a 'following' one
+  } else if (c === (side - 1)) {
+    square.forEach(row => row.pop())
+  }
+  // for each coordinate pair in the surrounding square, see if it is 'truthy'
+  // (ie `1`), and if so, increase the incrementor by 1
+  square.forEach(row => {
+    row.forEach(coord => {
+      if (board[coord[0]][coord[1]]) {
+        total += 1
+      }
+    })
   })
-
+  // returns the total number of surrounding live spaces
   return total
 }
 
+// have not yet edited/checked this...
 const next = () => {
   const nextBoard = board
   board.forEach(row => {
@@ -74,7 +92,3 @@ const next = () => {
   })
   board = nextBoard
 }
-
-
-
-// All other cells die or stay dead
